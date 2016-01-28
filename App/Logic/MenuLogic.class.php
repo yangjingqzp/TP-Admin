@@ -36,11 +36,6 @@ class MenuLogic extends BaseLogic {
      */
     public function getAccessibleLeftMenu($pid) {
         $menu_model = model('Menu');
-        $models = model('model')->where(array('siteid' => get_siteid()))->field('tablename')->select();
-        $post_type = array();
-        foreach ($models as $key => $value) {
-            $post_type[] = $value['tablename'];
-        }
         if (session(C('ADMIN_AUTH_KEY'))) {
             $menulist = $menu_model->where(array('pid' => $pid, 'status' => 1))->order('sort desc, id asc')->select();
         } else {
@@ -54,6 +49,11 @@ class MenuLogic extends BaseLogic {
                 ))
             ->order('node.sort desc, node.id asc')
             ->select();
+        }
+        $models = model('model')->where(array('siteid' => get_siteid()))->field('tablename')->select();
+        $post_type = array();
+        foreach ($models as $key => $value) {
+            $post_type[] = $value['tablename'];
         }
         // 过滤不属于当前站点的POST TYPE 菜单
         foreach ($menulist as $key => $value) {

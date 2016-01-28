@@ -107,16 +107,17 @@ class RoleController extends CommonController {
                 $this->success('操作成功！', 'index');
             }
         } else {
-            $menus = model("Menu")->nodeList();
-            $authorized = array();
-            $sites = model('Site')->select();
             $siteid = I('get.siteid');
+            $sites = model('Site')->select();
             if (!empty($siteid)) {
                 $current_site = model('Site')->find($siteid);
             }
             if ( !isset( $current_site ) || empty($current_site) ) {
                 $current_site = current($sites);
             }
+
+            $menus = model("Menu")->nodeList($current_site['id']);
+            $authorized = array();
             $access_list = model("Access")->where( array( 'role_id' => $role_id, 'siteid' => $current_site['id'] ) )->select();
             foreach ($access_list as $key => $value) {
                 $authorized[$value['node_id']] = $value;
