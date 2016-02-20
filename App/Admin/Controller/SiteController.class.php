@@ -69,12 +69,8 @@ class SiteController extends CommonController {
                 $this->error('操作失败');
             }
         } else {
-            /*$template_list = template_list();
-            $setting = string2array($site['setting']);
-            $setting['watermark_img'] = str_replace('statics/images/water/','',$setting['watermark_img']);
-            $this->assign('template_list',$template_list);
-            $this->assign('setting',$setting);
-            $this->assign('data',$site);*/
+            $templates = get_page_templates();
+            $this->assign('templates',$templates);
             $this->display();
         }
     }

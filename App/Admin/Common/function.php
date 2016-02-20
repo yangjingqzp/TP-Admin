@@ -1,30 +1,50 @@
 <?php
 /**
 * 模板风格列表
-* @param integer $siteid 站点ID，获取单个站点可使用的模板风格列表
-* @param integer $disable 是否显示停用的{1:是,0:否}
 */
-
-function template_list($siteid = '', $disable = 0) {
-	$list = glob(TMPL_PATH. C("DEFAULT_GROUP") .DIRECTORY_SEPARATOR.'*', GLOB_ONLYDIR);
+function template_list() {
+	$template_path = APP_PATH . 'Home/View';
+	$list = glob($template_path . DIRECTORY_SEPARATOR . '*', GLOB_ONLYDIR | GLOB_NOSORT);
 	$arr = array();
 	foreach ($list as $key=>$v) {
 		$dirname = basename($v);
 		if (file_exists($v.DIRECTORY_SEPARATOR.'config.php')) {
 			$template_config = include $v.DIRECTORY_SEPARATOR.'config.php';
 			$arr[$key]['name'] = $template_config['name'];
-			if (!$disable && isset($template_config['disable']) && $template_config['disable'] == 1) {
-				unset($arr[$key]);
-				continue;
-			}
 		} else {
 			$arr[$key]['name'] = $dirname;
 		}
 		$arr[$key]['dirname']= $dirname;
 	}
+	ksort($arr);
 	return $arr;
 }
 
+/**
+ * 页面模板
+ */
+function get_page_templates() {
+	$site_id = get_siteid();
+	$site_info = siteinfo($site_id);
+	$template_path = APP_PATH . 'Home/View/' . $site_info['template'];
+	$template_files = glob($template_path . '/Content/page*.html', GLOB_NOSORT | GLOB_NOSORT);
+	$arr = array();
+	foreach ($template_files as $key => $file) {
+		$file_name = basename($file, '.html');
+		if (file_exists($template_path.DIRECTORY_SEPARATOR.'config.php')) {
+			$template_config = include $template_path.DIRECTORY_SEPARATOR.'config.php';
+			if (isset($template_config['Content'][$file_name])) {
+				$arr[$file_name] = $template_config['Content'][$file_name];
+			} else {
+				$arr[$file_name] = $file_name;
+			}
+		} else {
+			$arr[$file_name] = $file_name;
+		}
+	}
+	ksort($arr);
+	return $arr;
+}
 
 /**
 * 获取站点的信息

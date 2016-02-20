@@ -63,19 +63,19 @@ class PostModel extends BaseModel {
         $inputinfo = $content_input->get($data);
         $inputinfo = $inputinfo['system'];
         // 匹配数据库字段，防止SQL语句出错
-        $systeminfo = $this->parseField($inputinfo);
-        $systeminfo = array_merge($systeminfo,array('username' => $_SESSION['user_info']['account'], 'siteid' => get_siteid()));
+        $postData = $this->parseField($inputinfo);
+        $postData = array_merge($postData,array('username' => $_SESSION['user_info']['account'], 'siteid' => get_siteid()));
 
         // 设置更新时间 统一到CommonModel中通过CallBack函数设置
         /*if(isset($content_input->fields['updatetime'])) {
             $setting = string2array($content_input->fields['updatetime']['setting']);
             if ($setting['fieldtype'] == "int") {
-                $systeminfo['updatetime'] = time();
+                $postData['updatetime'] = time();
             } else {
-                $systeminfo['updatetime'] = date($setting['format']);
+                $postData['updatetime'] = date($setting['format']);
             }
         }*/
-        return $this->add($systeminfo);
+        return $this->add($postData);
 
     }
 
@@ -88,19 +88,19 @@ class PostModel extends BaseModel {
         $content_input = new \content_input($this->modelid);
         $inputinfo = $content_input->get($data);
         $inputinfo = $inputinfo['system'];
-        $systeminfo = $this->parseField($inputinfo);
-        $systeminfo['siteid'] = get_siteid();
+        $postData = $this->parseField($inputinfo);
+        $postData['siteid'] = get_siteid();
 
         // 设置更新时间 统一到CommonModel中通过CallBack函数设置
         /*if(isset($content_input->fields['updatetime'])) {
             $setting = string2array($content_input->fields['updatetime']['setting']);
             if ($setting['fieldtype'] == "int") {
-                $systeminfo['updatetime'] = time();
+                $postData['updatetime'] = time();
             } else {
-                $systeminfo['updatetime'] = date($setting['format']);
+                $postData['updatetime'] = date($setting['format']);
             }
         }*/
-        return $this->where("id = %d", $post_id)->save($systeminfo);
+        return $this->where("id = %d", $post_id)->save($postData);
     }
 
     public function deleteContent($ids) {

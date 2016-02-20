@@ -1,40 +1,45 @@
 <?php
 class content_form {
 	public $modelid;
+	public $pageTemplate;
 	public $fields;
 	public $id;
 	public $formValidator;
 	public $siteid;
 
-	public function __construct($modelid,$catid=0,$categorys = array()) {
-		$this->modelid = $modelid;
-		$this->catid = $catid;
-		$this->categorys = $categorys;
-		$this->fields = $this->get_fields($modelid);
+	public function __construct($data, $type=1) {
+		switch ($type) {
+			case 1:
+				$this->modelid = $data;
+				$this->fields = $this->getModelFields($data);
+				break;
+			case 2:
+				$this->pageTemplate = $data;
+				$this->fields = $this->getPageFields($data);
+				break;
+			default:
+				$this->modelid = $data;
+				$this->fields = $this->getModelFields($data);
+				break;
+		}
 		$this->siteid = get_siteid();
 	}
 
-	public function get_fields($modelid) {
-		$field_array = array();
-		$fields = D("ModelField")->where(array('siteid' => get_siteid(), 'modelid' => $modelid, 'disabled'=>0))->order("listorder asc, fieldid asc")->limit(100)->select();
-		foreach($fields as $_value) {
-			$setting = string2array($_value['setting']);
-			$_value = array_merge($_value,$setting);
-			$field_array[$_value['field']] = $_value;
-		}
-		return $field_array;
+	public function getModelFields($modelid) {
+		return model('ModelField')->getFieldsByModelID($modelid);
+	}
+
+	public function getPageFields($pageTemplate) {
+		return model('PageField')->getFields($pageTemplate);
 	}
 
 	public function get($data = array()) {
 		$this->data = $data;
 		if(isset($data['id'])) $this->id = $data['id'];
 		$info = array();
-		$this->content_url = $data['url'];
 		foreach($this->fields as $field=>$v) {
 			if(defined('IN_ADMIN')) {
 				if($v['iscore']) continue;
-			} else {
-				if($v['iscore'] || !$v['isadd']) continue;
 			}
 			$func = $v['formtype'];
 
@@ -46,22 +51,12 @@ class content_form {
 			} else {
 				$value = isset($data[$field]) ? htmlspecialchars($data[$field], ENT_QUOTES) : '';
 			}
-
 			if(!method_exists($this, $func)) continue;
 			$form = $this->$func($field, $value, $v);
+
 			if($form !== false) {
-				if(defined('IN_ADMIN')) {
-					if($v['isbase']) {
-						$star = $v['minlength'] || $v['pattern'] ? 1 : 0;
-						$info['base'][$field] = array('name'=>$v['name'], 'tips'=>$v['tips'], 'form'=>$form, 'star'=>$star,'isomnipotent'=>$v['isomnipotent'],'formtype'=>$v['formtype']);
-					} else {
-						$star = $v['minlength'] || $v['pattern'] ? 1 : 0;
-						$info['senior'][$field] = array('name'=>$v['name'], 'tips'=>$v['tips'], 'form'=>$form, 'star'=>$star,'isomnipotent'=>$v['isomnipotent'],'formtype'=>$v['formtype']);
-					}
-				} else {
-					$star = $v['minlength'] || $v['pattern'] ? 1 : 0;
-					$info[$field] = array('name'=>$v['name'], 'tips'=>$v['tips'], 'form'=>$form, 'star'=>$star,'isomnipotent'=>$v['isomnipotent'],'formtype'=>$v['formtype']);
-				}
+				$star = $v['minlength'] || $v['pattern'] ? 1 : 0;
+				$info[$field] = array('name'=>$v['name'], 'tips'=>$v['tips'], 'form'=>$form, 'star'=>$star,'isomnipotent'=>$v['isomnipotent'],'formtype'=>$v['formtype']);
 			}
 		}
 		return $info;
@@ -102,7 +97,7 @@ class content_form {
 		if(!$value) $value = $defaultvalue;
 		if($minlength || $pattern) $allow_empty = '';
 		if($minlength) $this->formValidator .= '$("#'.$field.'").formValidator({'.$allow_empty.'onshow:"",onfocus:"'.$errortips.'"}).functionValidator({fun:function(val,elem){var oEditor = CKEDITOR.instances.'.$field.';var data = oEditor.getData();if($(\'#islink\').attr(\'checked\')){return true;} else if(($(\'#islink\').attr(\'checked\')==false) && (data==\'\')){return "'.$errortips.'";} else if (data==\'\' || $.trim(data)==\'\') {return "'.$errortips.'";e}return true;}});';
-		return "<div id='{$field}_tip'></div>".'<textarea name="info['.$field.']" id="'.$field.'" boxid="'.$field.'">'.stripslashes($value).'</textarea>'.\Org\Util\Form::editor($field,$toolbar,'content',$this->catid,'',$allowupload,1,'',$height,$disabled_page);
+		return "<div id='{$field}_tip'></div>".'<textarea name="info['.$field.']" id="'.$field.'" boxid="'.$field.'">'.stripslashes($value).'</textarea>'.\Org\Util\Form::editor($field,$toolbar,'',$allowupload,1,'',$height);
 	}
 
 	public function title($field, $value, $fieldinfo) {
@@ -306,7 +301,7 @@ class content_form {
 		</fieldset>
 		<div class="bk10"></div>
 		';
-		$string .= $str."<input type=\"button\"  class=\"button\" value=\"多文件上传\" onclick=\"javascript:flashupload('{$field}_multifile', '附件上传','{$field}',change_multifile,'{$upload_number},{$upload_allowext},{$isselectimage}','content','$this->catid','{$authkey}')\"/>    <input type=\"button\" class=\"button\" value=\"添加远程地址\" onclick=\"add_multifile('{$field}')\">";
+		$string .= $str."<input type=\"button\"  class=\"button\" value=\"多文件上传\" onclick=\"javascript:flashupload('{$field}_multifile', '附件上传','{$field}',change_multifile,'{$upload_number},{$upload_allowext},{$isselectimage}','content','','{$authkey}')\"/>    <input type=\"button\" class=\"button\" value=\"添加远程地址\" onclick=\"add_multifile('{$field}')\">";
 		return $string;
 	}
 

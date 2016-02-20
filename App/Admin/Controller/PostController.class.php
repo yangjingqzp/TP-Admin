@@ -119,8 +119,6 @@ class PostController extends CommonController {
             require MODEL_PATH.'content_form.class.php';
             $content_form = new \content_form($module['id']);
             $forminfos = $content_form->get();
-            // 合并基本和高级属性
-            $forminfos = array_merge($forminfos['base'], $forminfos['senior']);
             $this->assign('taxonomies', $taxonomies);
             $this->assign('termsGroupByTaxonomy', $termsGroupByTaxonomy);
             $this->assign('formValidator', $content_form->formValidator);
@@ -179,6 +177,7 @@ class PostController extends CommonController {
                 $this->db->commit();
                 $this->success('更新成功!', U('Post/index', array('moduleid' => $module['id'])));
             } else {
+                $this->db->rollback();
                 $this->error('更新失败！');
             }
         } else {
@@ -205,7 +204,6 @@ class PostController extends CommonController {
             require MODEL_PATH.'content_form.class.php';
             $content_form = new \content_form($module['id']);
             $forminfos = $content_form->get($post);
-            $forminfos = array_merge($forminfos['base'], $forminfos['senior']);
 
             $this->assign('taxonomies', $taxonomies);
             $this->assign('termsGroupByTaxonomy', $termsGroupByTaxonomy);

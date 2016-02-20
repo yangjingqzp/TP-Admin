@@ -13,17 +13,14 @@ class Form {
     /**
     * 编辑器
     * @param int $textareaid
-    * @param int $toolbar
-    * @param string $module 模块名称
-    * @param int $catid 栏目id
+    * @param int $toolbar_type
     * @param int $color 编辑器颜色
     * @param boole $allowupload  是否允许上传
     * @param boole $allowbrowser 是否允许浏览文件
     * @param string $alowuploadexts 允许上传类型
     * @param string $height 编辑器高度
-    * @param string $disabled_page 是否禁用分页和子标题
     */
-    public static function editor($textareaid = 'content', $toolbar_type = 'basic', $module = '', $catid = '', $color = '', $allowupload = 0, $allowbrowser = 1,$alowuploadexts = '',$height = 200,$disabled_page = 0, $allowuploadnum = '10') {
+    public static function editor($textareaid = 'content', $toolbar_type = 'basic', $color = '', $allowupload = 0, $allowbrowser = 1,$alowuploadexts = '',$height = 200) {
         $str .= "<script type=\"text/javascript\">\r\n";
         $str .= "if ( CKEDITOR.env.ie && CKEDITOR.env.version < 9 ) { CKEDITOR.tools.enableHtml5Elements( document ) };\r\n";
         if($toolbar_type == 'basic') {
@@ -58,13 +55,11 @@ class Form {
         }
         $ck_options = "{\r\nheight:{$height},\r\n";
             if($allowupload) {
-                /*$ck_options .="flashupload:true,\r\n" .
-                    "alowuploadexts:'".$alowuploadexts."',\r\n" .
-                    "allowbrowser:'".$allowbrowser."',\r\n" .
-                    "allowuploadnum:'".$allowuploadnum."',\r\n";*/
                 $ck_options .= "imageUploadUrl : '" . __MODULE__  . "/File/upload?type=ck_drag',\r\n";
                 $ck_options .= "filebrowserUploadUrl : '" . __MODULE__  . "/File/upload?type=ck_image',\r\n";
-                $ck_options .= "filebrowserBrowseUrl: '" . __MODULE__  . "/Attachment/album_list',\r\n";
+                if ($allowbrowser) {
+                    $ck_options .= "filebrowserBrowseUrl: '" . __MODULE__  . "/Attachment/album_list',\r\n";
+                }
             }
             if($color) {
                 $ck_options .= "extraPlugins : 'uicolor',uiColor: '$color',";

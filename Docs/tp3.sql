@@ -950,6 +950,69 @@ INSERT INTO `xy_user` (`id`, `account`, `password`, `realname`, `email`, `last_l
 (45, 'tp-admin', 'b990e224fe46ed9cf0a8cd8c49d59629', '', '', 1453702321, NULL, 0, 1, 2),
 (51, '476552238@qq.com', '2067cc5f3541bc1ba330c8af61748ff8', '', '', 0, NULL, 0, 0, 2);
 
+
+
+
+--
+-- 表的结构 `xy_page`
+--
+
+CREATE TABLE IF NOT EXISTS `xy_page` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `siteid` smallint(6) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `content` text NOT NULL,
+  `template` varchar(255) NOT NULL,
+  `inputtime` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updatetime` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `xy_pagemeta`
+--
+
+CREATE TABLE IF NOT EXISTS `xy_pagemeta` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `page_id` int(11) NOT NULL,
+  `meta_key` varchar(255) NOT NULL,
+  `meta_value` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `xy_page_field`
+--
+
+CREATE TABLE IF NOT EXISTS `xy_page_field` (
+  `fieldid` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `template` varchar(255) NOT NULL,
+  `siteid` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `field` varchar(20) NOT NULL DEFAULT '',
+  `name` varchar(30) NOT NULL DEFAULT '',
+  `tips` text,
+  `css` varchar(30) NOT NULL DEFAULT '',
+  `minlength` int(10) unsigned NOT NULL DEFAULT '0',
+  `maxlength` int(10) unsigned NOT NULL DEFAULT '0',
+  `pattern` varchar(255) NOT NULL DEFAULT '',
+  `errortips` varchar(255) NOT NULL DEFAULT '',
+  `formtype` varchar(20) NOT NULL DEFAULT '',
+  `setting` mediumtext,
+  `formattribute` varchar(255) NOT NULL DEFAULT '',
+  `unsetgroupids` varchar(255) NOT NULL DEFAULT '',
+  `unsetroleids` varchar(255) NOT NULL DEFAULT '',
+  `iscore` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `listorder` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `disabled` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`fieldid`),
+  KEY `modelid` (`template`,`disabled`),
+  KEY `field` (`field`,`template`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
 --
 -- Indexes for dumped tables
 --

@@ -24,8 +24,4 @@
       <td>编辑器默认高度：</td>
       <td><input type="text" name="setting[height]" value="<?php echo $setting['height'];?>" size="4" class="input-text"> px</td>
     </tr>
-	<tr>
-      <td>禁止显示编辑器下方的分页符与子标题：</td>
-      <td><input type="radio" name="setting[disabled_page]" value="1" <?php if($setting['disabled_page']==1) echo 'checked';?>> 禁止 <input type="radio" name="setting[disabled_page]" value="0" <?php if($setting['disabled_page']==0) echo 'checked';?>> 显示</td>
-    </tr>
 </table>

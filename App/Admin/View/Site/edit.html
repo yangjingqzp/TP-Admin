@@ -26,6 +26,16 @@
                     <th>站点域名：</th>
                     <td class="y-bg"><input type="text" class="input-text" name="info[domain]" id="domain"  size="30" value="<?php echo $data['domain']?>" /></td>
                 </tr>
+                <tr>
+                    <th>站点模板：</th>
+                    <td class="y-bg">
+                        <select name="info[template]" id="template">
+                            <?php foreach ($template_list as $key => $value) { ?>
+                                <option value="<?php echo $value['dirname']; ?>" <?php $value['dirname'] == $site['template'] ? 'selected' : ''; ?>><?php echo $value['name']; ?></option>
+                            <?php } ?>
+                        </select>
+                    </td>
+                </tr>
             </table>
         </fieldset>
         <div class="bk10"></div>

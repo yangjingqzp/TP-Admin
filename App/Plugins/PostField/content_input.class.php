@@ -1,23 +1,32 @@
 <?php
 class content_input {
-	var $modelid;
-	var $fields;
-	var $data;
+	public $modelid;
+	public $fields;
+	public $data;
 
-	function __construct($modelid) {
-		$this->modelid = $modelid;
-		$this->fields = $this->get_fields($modelid);
+	public function __construct($data, $type=1) {
+		switch ($type) {
+			case 1:
+				$this->modelid = $data;
+				$this->fields = $this->getModelFields($data);
+				break;
+			case 2:
+				$this->pageTemplate = $data;
+				$this->fields = $this->getPageFields($data);
+				break;
+			default:
+				$this->modelid = $data;
+				$this->fields = $this->getModelFields($data);
+				break;
+		}
 	}
 
-	function get_fields($modelid) {
-		$field_array = array();
-		$fields = D("ModelField")->where(array('siteid' => get_siteid(), 'modelid' => $modelid, 'disabled'=>0))->order("listorder asc, fieldid asc")->limit(100)->select();
-		foreach($fields as $_value) {
-			$setting = string2array($_value['setting']);
-			$_value = array_merge($_value,$setting);
-			$field_array[$_value['field']] = $_value;
-		}
-		return $field_array;
+	public function getModelFields($modelid) {
+		return model('ModelField')->getFieldsByModelID($modelid);
+	}
+
+	public function getPageFields($pageTemplate) {
+		return model('PageField')->getFields($pageTemplate);
 	}
 
 	function get($data,$isimport = 0) {
@@ -57,10 +66,9 @@ class content_input {
 			$func = $this->fields[$field]['formtype'];
 			if(method_exists($this, $func)) $value = $this->$func($field, $value);
 			$info['system'][$field] = $value;
-
 		}
 		//颜色选择为隐藏域 在这里进行取值
-		$info['system']['style'] = $_POST['style_color'] ? strip_tags($_POST['style_color']) : '';
+		if($_POST['style_color']) $info['system']['style'] = $_POST['style_color'] ? strip_tags($_POST['style_color']) : '';
 		if($_POST['style_font_weight']) $info['system']['style'] = $info['system']['style'].';'.strip_tags($_POST['style_font_weight']);
 		return $info;
 	}

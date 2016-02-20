@@ -285,7 +285,11 @@ body fieldset.blue legend{padding:3px 8px;font-weight:700;color:#347add; backgro
     background: #fff;
     margin-bottom: 20px;
 }
-
+.postbox p {
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 1em 0;
+}
 .postbox h3.title {
     font-size: 14px;
     padding: 8px 12px;
