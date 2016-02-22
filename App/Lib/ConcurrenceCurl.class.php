@@ -3,11 +3,11 @@ namespace Lib;
 use Exception;
 
 /**
- * 异步CURL类库
+ * 并发CURL类库
  * @author 逍遥·李志亮 <xiaoyao.working@gmail.com>
  */
 
-class EpiCurl {
+class ConcurrenceCurl {
     const TIMEOUT_MS = 1000;
     static $inst = null;
     static $singleton = 0;
@@ -23,7 +23,7 @@ class EpiCurl {
     private $curlExecTime = array();
     function __construct() {
         if(self::$singleton == 0) {
-            throw new Exception('This class cannot be instantiated by the new keyword.  You must instantiate it using: $obj = EpiCurl::getInstance();');
+            throw new Exception('This class cannot be instantiated by the new keyword.  You must instantiate it using: $obj = ConcurrenceCurl::getInstance();');
         }
         $this->mc = curl_multi_init();
         $this->properties = array(
@@ -56,7 +56,7 @@ class EpiCurl {
             do {
                 $code = $this->execStatus = curl_multi_exec($this->mc, $this->running);
             } while ($this->execStatus === CURLM_CALL_MULTI_PERFORM);
-            return new EpiCurlManager($key);
+            return new ConcurrenceCurlManager($key);
         } else {
             return $code;
         }
@@ -134,7 +134,7 @@ class EpiCurl {
     static function getInstance() {
         if(self::$inst == null) {
             self::$singleton = 1;
-            self::$inst = new EpiCurl();
+            self::$inst = new ConcurrenceCurl();
         }
         return self::$inst;
     }
@@ -145,22 +145,22 @@ class EpiCurl {
 }
 
 /**
- * EpiCurl 操作管理
+ * ConcurrenceCurl 操作管理
  */
-class EpiCurlManager {
+class ConcurrenceCurlManager {
     private $key;
-    private $epiCurl;
+    private $concurrenceCurl;
     function __construct($key) {
         $this->key = $key;
-        $this->epiCurl = EpiCurl::getInstance();
+        $this->concurrenceCurl = ConcurrenceCurl::getInstance();
     }
 
     public function getResponse() {
-        return $this->epiCurl->getResult($this->key);
+        return $this->concurrenceCurl->getResult($this->key);
     }
 
     function __get($name) {
-        $responses = $this->epiCurl->getResult($this->key);
+        $responses = $this->concurrenceCurl->getResult($this->key);
         return $responses[$name];
     }
 

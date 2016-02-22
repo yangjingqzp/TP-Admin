@@ -65,14 +65,10 @@ switch($field_type) {
 	case 'timestamp':
 		$this->db->execute("ALTER TABLE `$tablename` ADD `$field` TIMESTAMP NOT NULL");
 	break;
-	//特殊自定义字段
-	case 'pages':
-		$this->db->execute("ALTER TABLE `$tablename` ADD `paginationtype` TINYINT( 1 ) NOT NULL DEFAULT '0'");
-		$this->db->execute("ALTER TABLE `$tablename` ADD `maxcharperpage` MEDIUMINT( 6 ) NOT NULL DEFAULT '0'");
-	break;
+
 	case 'readpoint':
 		$defaultvalue = intval($defaultvalue);
-		$this->db->execute("ALTER TABLE `$tablename` ADD `readpoint` smallint(5) unsigned NOT NULL default '$defaultvalue'");
+		$this->db->execute("ALTER TABLE `$tablename` ADD `$field` smallint(5) unsigned NOT NULL default '$defaultvalue'");
 		$this->db->execute("ALTER TABLE `$tablename` ADD `paytype` tinyint(1) unsigned NOT NULL default '0'");
 	break;
 }

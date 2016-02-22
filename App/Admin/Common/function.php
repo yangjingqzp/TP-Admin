@@ -46,6 +46,34 @@ function get_page_templates() {
 	return $arr;
 }
 
+
+/**
+ * 模型详情页模板
+ */
+function get_post_templates() {
+	$site_id = get_siteid();
+	$site_info = siteinfo($site_id);
+	$template_path = APP_PATH . 'Home/View/' . $site_info['template'];
+	$template_files = glob($template_path . '/Content/post*.html', GLOB_NOSORT | GLOB_NOSORT);
+	$arr = array();
+	foreach ($template_files as $key => $file) {
+		$file_name = basename($file, '.html');
+		if (file_exists($template_path.DIRECTORY_SEPARATOR.'config.php')) {
+			$template_config = include $template_path.DIRECTORY_SEPARATOR.'config.php';
+			if (isset($template_config['Content'][$file_name])) {
+				$arr[$file_name] = $template_config['Content'][$file_name];
+			} else {
+				$arr[$file_name] = $file_name;
+			}
+		} else {
+			$arr[$file_name] = $file_name;
+		}
+	}
+	ksort($arr);
+	return $arr;
+}
+
+
 /**
 * 获取站点的信息
 * @param $siteid   站点ID

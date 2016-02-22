@@ -64,13 +64,9 @@ switch($field_type) {
 	case 'timestamp':
 		$this->db->execute("ALTER TABLE `$tablename` CHANGE `$oldfield` `$field` TIMESTAMP NOT NULL");
 	break;
-	//特殊自定义字段
-	case 'pages':
-
-	break;
 	case 'readpoint':
 		$defaultvalue = intval($defaultvalue);
-		$this->db->execute("ALTER TABLE `$tablename` CHANGE `$oldfield` `readpoint` smallint(5) unsigned NOT NULL default '$defaultvalue'");
+		$this->db->execute("ALTER TABLE `$tablename` CHANGE `$oldfield` `$field` smallint(5) unsigned NOT NULL default '$defaultvalue'");
 	break;
 
 }

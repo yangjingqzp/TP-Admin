@@ -119,6 +119,11 @@ class PostController extends CommonController {
             require MODEL_PATH.'content_form.class.php';
             $content_form = new \content_form($module['id']);
             $forminfos = $content_form->get();
+
+            $default_template = 'post-' . $module['tablename'];
+            $template_list = get_post_templates();
+            $this->assign('template_list', $template_list);
+            $this->assign('default_template', $default_template);
             $this->assign('taxonomies', $taxonomies);
             $this->assign('termsGroupByTaxonomy', $termsGroupByTaxonomy);
             $this->assign('formValidator', $content_form->formValidator);
@@ -205,6 +210,8 @@ class PostController extends CommonController {
             $content_form = new \content_form($module['id']);
             $forminfos = $content_form->get($post);
 
+            $template_list = get_post_templates();
+            $this->assign('template_list', $template_list);
             $this->assign('taxonomies', $taxonomies);
             $this->assign('termsGroupByTaxonomy', $termsGroupByTaxonomy);
             $this->assign('formValidator', $content_form->formValidator);

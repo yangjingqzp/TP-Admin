@@ -5,6 +5,7 @@ CREATE TABLE `$basic_table` (
   `title` varchar(255) NOT NULL,
   `listorder` smallint(5) unsigned NOT NULL DEFAULT 0,
   `username` char(20) NOT NULL,
+  `template` varchar(255) NOT NULL,
   `status` tinyint(1) unsigned NOT NULL DEFAULT 0,
   `inputtime` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updatetime` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',

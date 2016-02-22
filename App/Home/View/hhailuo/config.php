@@ -4,5 +4,8 @@
         'Content' => array(
             'page' => '默认页面',
             'page-about' => '关于我们',
+
+            'post' => '模型通用详情页',
+            'post-tp3' => 'TP3模型详情页',
             )
         );

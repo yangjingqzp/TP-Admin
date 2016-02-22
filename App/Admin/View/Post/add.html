@@ -47,6 +47,13 @@
                             <label><input type="radio" name="info[status]" value="99" checked/> 发布 </label>
                             <label><input type="radio" name="info[status]" value="1" > 审核 </label>
                             <?php } ?>
+
+                            <p><strong>模板</strong></p>
+                            <select name="info[template]">
+                                <?php foreach ($template_list as $key => $value) { ?>
+                                <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+                                <?php } ?>
+                            </select>
                         </div>
                         <div class="major-operate clear">
                             <div class="left-link"></div>

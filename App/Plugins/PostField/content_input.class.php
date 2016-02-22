@@ -3,6 +3,8 @@ class content_input {
 	public $modelid;
 	public $fields;
 	public $data;
+    protected $concurrenceCurl = NULL;
+    protected $contentInputUrl = 'http://api.tp.hhailuo.com/plugins/postfield/content_input.php';
 
 	public function __construct($data, $type=1) {
 		switch ($type) {
@@ -33,7 +35,10 @@ class content_input {
 		$this->data = $data = trim_script($data);
 		$info = array();
 		foreach($data as $field=>$value) {
-			if(!isset($this->fields[$field]) && !check_in($field,'paytype,paginationtype,maxcharperpage,id')) continue;
+			if(!isset($this->fields[$field])) {
+                $info['system'][$field] = $value;
+               continue;
+            }
 			$name = $this->fields[$field]['name'];
 			$minlength = $this->fields[$field]['minlength'];
 			$maxlength = $this->fields[$field]['maxlength'];
@@ -61,12 +66,9 @@ class content_input {
 			if($pattern && $length && !preg_match($pattern, $value) && !$isimport) {
 				showmessage($errortips);
 			}
-
 			// 附加函数验证
 			$func = $this->fields[$field]['formtype'];
-
 			$value = $this->$func($field, $value);
-
 			$info['system'][$field] = $value;
 		}
 		//颜色选择为隐藏域 在这里进行取值
@@ -83,5 +85,35 @@ class content_input {
 	public function __call($name, $arguments) {
 		list($field, $value) = $arguments;
 		return file_exists(PLUGINS_PATH . 'PostField' . DS . $name . DS . 'input.inc.php') ? include PLUGINS_PATH . 'PostField' . DS . $name . DS . 'input.inc.php' : $value;
+	}
+
+	protected function curlFieldValue($field, $value) {
+		if (empty(self::$epiCurl)) {
+            $this->concurrenceCurl = \Lib\ConcurrenceCurl::getInstance();
+        }
+        $options[CURLOPT_POST] = true;
+        $options[CURLOPT_POSTFIELDS] = array('field' => $field, 'value' => $value);
+
+        $concurrence_curl_manager = $this->$concurrenceCurl->addUrl($this->contentInputUrl, $options);
+        $response = $concurrence_curl_manager->getResponse();
+        $result = false;
+        if ($response['code'] == 200) {
+            $response_data = json_decode($response['data'], true);
+            if ($response_data['code'] === 0) {
+                $result = isset($response_data['data']) ? $response_data['data'] : '';
+                if ($response['time'] > 0.2) {
+                    // 记录慢查询接口
+                    \Lib\Log::notice("CURL REQUEST ERROR : HTTP_CODE=" . $response['code'] . '; TOTAL_TIME=' . $response['time'] . "; EFFECTIVE_URL=" . $response['url'] . '; Data :' . $response['data']);
+                }
+            } else {
+                \Lib\Log::warn("CURL REQUEST ERROR : HTTP_CODE=" . $response['code'] . '; TOTAL_TIME=' . $response['time'] . "; EFFECTIVE_URL=" . $response['url'] . '; Data :' . $response['data']);
+                return false;
+            }
+        } else {
+            // 记录接口请求错误
+            \Lib\Log::error("CURL REQUEST ERROR : HTTP_CODE=" . $response['code'] . '; TOTAL_TIME=' . $response['time'] . "; EFFECTIVE_URL=" . $response['url'] . '; Data :' . $response['data']);
+            return false;
+        }
+        return $result === false ? $value : $result;
 	}
 }

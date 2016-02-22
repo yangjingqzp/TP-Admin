@@ -129,35 +129,12 @@ class ModelFieldController extends CommonController {
             $model = $this->model_db->find($modelid);
             $model_field = $this->db->where(array('fieldid' => $fieldid))->find();
             extract($model_field);
-            require MODEL_PATH.$formtype.DIRECTORY_SEPARATOR.'config.inc.php';
-            $setting = string2array($setting);
-            ob_start();
-            include MODEL_PATH.$formtype.DIRECTORY_SEPARATOR.'field_edit_form.inc.php';
-            $form_data = ob_get_contents();
-            ob_end_clean();
+            $this->assign('fields', $fields);
             $this->assign('modelid',$modelid);
             $this->assign('fieldid',$fieldid);
             $this->assign('model',$model);
             $this->assign('model_field',$model_field);
             $this->assign('form_data',$form_data);
-
-            // field.inc
-            $this->assign('fields', $fields);
-            $this->assign('not_allow_fields', $not_allow_fields);
-            $this->assign('unique_fields', $unique_fields);
-            $this->assign('forbid_fields', $forbid_fields);
-            $this->assign('forbid_delete', $forbid_delete);
-            $this->assign('att_css_js', $att_css_js);
-
-            // config.inc
-            $this->assign('field_type',$field_type);
-            $this->assign('field_basic_table',$field_basic_table);
-            $this->assign('field_allow_index',$field_allow_index);
-            $this->assign('field_minlength',$field_minlength);
-            $this->assign('field_maxlength',$field_maxlength);
-            $this->assign('field_allow_search',$field_allow_search);
-            $this->assign('field_allow_fulltext',$field_allow_fulltext);
-            $this->assign('field_allow_isunique',$field_allow_isunique);
             $this->display();
         }
     }
