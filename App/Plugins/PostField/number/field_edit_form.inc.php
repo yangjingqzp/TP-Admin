@@ -1,4 +1,3 @@
-
 <table cellpadding="2" cellspacing="1" width="98%">
 	<tr>
       <td width="100">取值范围</td>

@@ -1,10 +1,12 @@
-	function text($field, $value, $fieldinfo) {
-		extract($fieldinfo);
-		$setting = string2array($setting);
-		$size = $setting['size'];
-		if(!$value) $value = $defaultvalue;
-		$type = $ispassword ? 'password' : 'text';
-		$errortips = $this->fields[$field]['errortips'];
-		if($errortips || $minlength) $this->formValidator .= '$("#'.$field.'").formValidator({onshow:"",onfocus:"'.$errortips.'"}).inputValidator({min:1,onerror:"'.$errortips.'"});';
-		return '<input type="text" name="info['.$field.']" id="'.$field.'" size="'.$size.'" value="'.$value.'" class="input-text" '.$formattribute.' '.$css.'>';
-	}
+<?php
+extract($fieldinfo);
+if(!$value) $value = $defaultvalue;
+$type = $ispassword ? 'password' : 'text';
+$this->formValidator .= '$("#'.$field.'")';
+if($errortips || $minlength) $this->formValidator .= '.formValidator({onfocus:"'.$errortips.'"}).inputValidator({min:'.$minlength. ($maxlength ? ', max:'.$maxlength : '') .', onerror:"'.$errortips.'"})';
+
+if (!empty($pattern)) {
+	$this->formValidator .= '.functionValidator({fun: function(value, _this) { return '.$pattern.'.test(value); }, onerror:\''. $errortips .'\'})';
+}
+$this->formValidator .= ';';
+return '<input type="' . $type . '" name="info['.$field.']" id="'.$field.'" size="'.$size.'" value="'.$value.'" class="input-text" '.$formattribute.' '.$css.'>';

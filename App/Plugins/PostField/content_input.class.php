@@ -64,7 +64,9 @@ class content_input {
 
 			// 附加函数验证
 			$func = $this->fields[$field]['formtype'];
-			if(method_exists($this, $func)) $value = $this->$func($field, $value);
+
+			$value = $this->$func($field, $value);
+
 			$info['system'][$field] = $value;
 		}
 		//颜色选择为隐藏域 在这里进行取值
@@ -73,112 +75,13 @@ class content_input {
 		return $info;
 	}
 
-	function box($field, $value) {
-		if($this->fields[$field]['boxtype'] == 'checkbox') {
-			if(!is_array($value) || empty($value)) return false;
-			array_shift($value);
-			$value = ','.implode(',', $value).',';
-			return $value;
-		} elseif($this->fields[$field]['boxtype'] == 'multiple') {
-			if(is_array($value) && count($value)>0) {
-				$value = ','.implode(',', $value).',';
-				return $value;
-			}
-		} else {
-			return $value;
-		}
-	}
-
-	function copyfrom($field, $value) {
-		$field_data = $field.'_data';
-		if(isset($_POST[$field_data])) {
-			$value .= '|'.safe_replace($_POST[$field_data]);
-		}
-		return $value;
-	}
-
-	function datetime($field, $value) {
-		$setting = string2array($this->fields[$field]['setting']);
-		if($setting['fieldtype']=='int') {
-			$value = strtotime($value);
-		}
-		return $value;
-	}
-
-	function downfiles($field, $value) {
-		$files = $_POST[$field.'_fileurl'];
-		$files_alt = $_POST[$field.'_filename'];
-		$array = $temp = array();
-		if(!empty($files)) {
-			foreach($files as $key=>$file) {
-				$temp['fileurl'] = $file;
-				$temp['filename'] = $files_alt[$key];
-				$array[$key] = $temp;
-			}
-		}
-		$array = array2string($array);
-		return $array;
-	}
-
-	function editor($field, $value) {
-		$value = html_entity_decode($value);
-		/*$setting = string2array($this->fields[$field]['setting']);
-		$enablesaveimage = $setting['enablesaveimage'];
-		if(isset($_POST['spider_img'])) $enablesaveimage = 0;
-		if($enablesaveimage) {
-			$site_setting = string2array($this->site_config['setting']);
-			$watermark_enable = intval($site_setting['watermark_enable']);
-			$value = $this->attachment->download('content', $value,$watermark_enable);
-		}*/
-		return $value;
-	}
-
-	function groupid($field, $value) {
-		$datas = '';
-		if(!empty($_POST[$field]) && is_array($_POST[$field])) {
-			$datas = implode(',',$_POST[$field]);
-		}
-		return $datas;
-	}
-
-	function image($field, $value) {
-		$value = str_replace(array("'",'"','(',')'),'',$value);
-		return trim($value);
-	}
-
-	function images($field, $value) {
-		//取得图片列表
-		$pictures = $_POST[$field]['url'];
-		//取得图片说明
-		$pictures_alt = isset($_POST[$field]['alt']) ? $_POST[$field]['alt'] : array();
-		$array = $temp = array();
-		if(!empty($pictures)) {
-			foreach($pictures as $key=>$pic) {
-				$temp['url'] = $pic;
-				$temp['alt'] = str_replace(array('"',"'"),'`',$pictures_alt[$key]);
-				$array[$key] = $temp;
-			}
-		}
-		$array = array2string($array);
-		return $array;
-	}
-
-	function posid($field, $value) {
-		$number = count($value);
-		$value = $number==1 ? 0 : 1;
-		return $value;
-	}
-
-	function textarea($field, $value) {
-		if(!$this->fields[$field]['enablehtml']) $value = strip_tags($value);
-		return $value;
-	}
-
 	function text($field, $value) {
 		if($this->fields[$field]['ispassword']) $value = md5($value);
 		return $value;
 	}
 
-
-
-}?>
+	public function __call($name, $arguments) {
+		list($field, $value) = $arguments;
+		return file_exists(PLUGINS_PATH . 'PostField' . DS . $name . DS . 'input.inc.php') ? include PLUGINS_PATH . 'PostField' . DS . $name . DS . 'input.inc.php' : $value;
+	}
+}

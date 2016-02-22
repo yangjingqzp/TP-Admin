@@ -1,4 +1,3 @@
-	function image($field, $value) {
-		$value = str_replace(array("'",'"','(',')'),'',$value);
-		return trim($value);
-	}
+<?php
+$value = str_replace(array("'",'"','(',')'),'',$value);
+return trim($value);
