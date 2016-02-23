@@ -30,40 +30,35 @@ class PostController extends CommonController {
         if (empty($module)) {
             $this->error('模型不存在！');
         }
+        $post_logic = logic('Post');
         $this->db->setModel($module['id']);
-        $search = array();
-        if (isset($_GET['search'])) {
-            if($_GET['start_time'] && !is_numeric($_GET['start_time'])) {
-                $search['inputtime'] = array('gt',strtotime($_GET['start_time']));
-            }
-            if($_GET['end_time'] && !is_numeric($_GET['end_time'])) {
-                $search['inputtime'] = array('lt',strtotime($_GET['end_time']));
-            }
-            if ($_GET['keyword']) {
-                switch (intval($_GET['searchtype'])) {
-                    case 0:
-                    $search['title'] = array('like', "%".safe_replace($_GET['keyword'])."%");
-                    break;
-                    case 1:
-                    $search['description'] = array('like', "%".safe_replace($_GET['keyword'])."%");
-                    break;
-                    case 2:
-                    $search['username'] = safe_replace($_GET['keyword']);
-                    case 3:
-                    $search['id'] = intval($_GET['keyword']);
-                    break;
-                    default:
-                    break;
-                }
-            }
-        }
 
         $list_fields = $this->db->getListFields(array('name', 'field'));
-        $contentFields = array('id', 'updatetime');
+        $fields = array('id', 'updatetime');
         foreach ($list_fields as $key => $field) {
-            $contentFields[] = $field['field'];
+            $fields[] = $field['field'];
         }
-        $data = $this->db->contentList($search, "listorder desc, id desc", 10, $contentFields);
+
+        // 分类，日期过滤
+        $tax = I('get.tax');
+        $date = I('get.date');
+        // 标题检索
+        $title = I('title');
+        $post_logic->registerFilter('tax', $tax);
+        $post_logic->registerFilter('date', $date);
+        $post_logic->registerFilter('like', array('title' => $title));
+
+        // 获取文章
+        $data = $post_logic->getPosts($module['tablename'], $fields);
+        // ->contentList($search, "listorder desc, id desc", 10, $fields);
+        // 获取日期、分类信息
+        $months = $this->db->getMonths();
+        $taxonomies = logic('taxonomy')->getPostTaxonomy($module['tablename']);
+        $termsGroupByTaxonomy = logic('category')->getPostTermsGroupByTaxonomy($module['tablename']);
+        $this->assign('tax', $tax_fiter);
+        $this->assign('months', $months);
+        $this->assign('taxonomies', $taxonomies);
+        $this->assign('termsGroupByTaxonomy', $termsGroupByTaxonomy);
         $this->assign('module', $module);
         $this->assign('contents',$data['data']);
         $this->assign('list_fields',$list_fields);

@@ -1,13 +1,13 @@
 <?php
 /**
- * @author 李志亮 <lizhiliang@kankan.com>
+ * @author 逍遥·李志亮 <xiaoyao.working@gmail.com>
  */
 function asset($path) {
 	return ASSETS_DOMAIN . $path . "?ms=" . C('version');
 }
 
 /**
- * @author 李志亮 <lizhiliang@kankan.com>
+ * @author 逍遥·李志亮 <xiaoyao.working@gmail.com>
  */
 function url($path='/', $params=array()) {
 	if ($path === '/') {
@@ -21,7 +21,7 @@ function url($path='/', $params=array()) {
 
 
 /**
- * @author 李志亮 <lizhiliang@kankan.com>
+ * @author 逍遥·李志亮 <xiaoyao.working@gmail.com>
  */
 if (!function_exists('http_response_code')) {
     function http_response_code($code = NULL) {
@@ -79,7 +79,7 @@ if (!function_exists('http_response_code')) {
 }
 
 /**
- * @author 李志亮 <lizhiliang@kankan.com>
+ * @author 逍遥·李志亮 <xiaoyao.working@gmail.com>
  */
 function abort($code=404) {
 	http_response_code($code);
@@ -100,7 +100,7 @@ function abort($code=404) {
  * 创建logic
  * @param string $name logic名称
  * @return Think\Model
- * @author 李志亮 <lizhiliang@kankan.com>
+ * @author 逍遥·李志亮 <xiaoyao.working@gmail.com>
  */
 function logic($name) {
 	$name = ucfirst($name);
@@ -117,7 +117,7 @@ function logic($name) {
  * 创建service
  * @param string $name service名称
  * @return Service\BaseService
- * @author 李志亮 <lizhiliang@kankan.com>
+ * @author 逍遥·李志亮 <xiaoyao.working@gmail.com>
  */
 function service($name) {
     $name = ucfirst($name);
@@ -135,7 +135,7 @@ function service($name) {
  * 创建service
  * @param string $name service名称
  * @return Service\BaseService
- * @author 李志亮 <lizhiliang@kankan.com>
+ * @author 逍遥·李志亮 <xiaoyao.working@gmail.com>
  */
 function model($name) {
     $name = ucfirst(parse_name($name, 1));
@@ -153,7 +153,6 @@ function model($name) {
 * @param  $siteid 站点id
 */
 function get_site_setting($siteid) {
-    // $siteinfo = getcache('sitelist', 'commons');
 	$siteid = $siteid ? $siteid : 1;
 	$siteinfo = get_site_info($siteid);
 	return string2array($siteinfo['setting']);

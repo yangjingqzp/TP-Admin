@@ -15,4 +15,17 @@ use Lib\Log;
  */
 class PostLogic extends BaseLogic {
 
+    /**
+     * [getPosts description]
+     * @param  string  $fields [description]
+     * @param  string  $order  [description]
+     * @param  integer $limit  [description]
+     * @return [type]          [description]
+     */
+    public function getPosts($fields='*', $order='listorder desc, id desc', $limit=20) {
+
+    }
+
+
+
 }

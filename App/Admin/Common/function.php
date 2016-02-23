@@ -149,32 +149,32 @@ function get_setting($type) {
 	} else {
 		switch($type) {
 			case 'banner':
-			$data['type'] = array('images' => L('photo'), 'flash' => L('flash'));
+			$data['type'] = array('images' => '图片', 'flash' => 'Flash');
 			$data['num'] = 1;
 			break;
 
 			case 'fixure':
-			$data['type'] = array('images' => L('photo'), 'flash' => L('flash'));
+			$data['type'] = array('images' => '图片', 'flash' => 'Flash');
 			$data['num'] = 1;
 			break;
 
 			case 'float':
-			$data['type'] = array('images' => L('photo'), 'flash' => L('flash'));
+			$data['type'] = array('images' => '图片', 'flash' => 'Flash');
 			$data['num'] = 1;
 			break;
 
 			case 'couplet':
-			$data['type'] = array('images' => L('photo'), 'flash' => L('flash'));
+			$data['type'] = array('images' => '图片', 'flash' => 'Flash');
 			$data['num'] = 2;
 			break;
 
 			case 'imagechange':
-			$data['type'] = array('images' => L('photo'));
+			$data['type'] = array('images' => '图片');
 			$data['num'] = 1;
 			break;
 
 			case 'imagelist':
-			$data['type'] = array('images' => L('photo'));
+			$data['type'] = array('images' => '图片');
 			$data['num'] = 1;
 			break;
 
@@ -187,7 +187,7 @@ function get_setting($type) {
 			break;
 
 			default :
-			$data['type'] = array('images' => L('photo'), 'flash' => L('flash'));
+			$data['type'] = array('images' => '图片', 'flash' => 'Flash');
 			$data['num'] = 1;
 		}
 	}

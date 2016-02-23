@@ -34,6 +34,14 @@ class PostModel extends BaseModel {
     }
 
     /**
+     * 获取内容月份列表
+     * @return [type] [description]
+     */
+    public function getMonths() {
+        return $this->query("select DATE_FORMAT(inputtime,'%Y-%m') month from " . $this->trueTableName . " group by month order by month desc");
+    }
+
+    /**
      * 获取列表页所需字段
      * @param mix $field 需要获取的ModelField表的字段
      * @param int $modelid 模型ID

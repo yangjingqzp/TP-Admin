@@ -77,7 +77,7 @@ body fieldset.blue legend{padding:3px 8px;font-weight:700;color:#347add; backgro
 #Scroll{ float:left; width:125px;padding:0 2px 0 10px; overflow:hidden}
 .left_menu_on{ width:10px; padding:0;}
 .left_menu_on #Scroll{display:none}
-.left_menu h3{font-weight: 700;color: #275d96;border-bottom:1px solid #d9e4ea; line-height:24px; height:24px; margin-bottom:5px}
+.left_menu h3{font-weight: 700;color: #275d96;border-bottom:1px solid #d9e4ea; line-height:24px; height:24px; margin-bottom:5px; overflow: hidden;}
 .left_menu ul li{color:#666; display:block; margin-right:1px}
 .left_menu ul li a{line-height:24px;padding-left:8px;display:block;text-decoration: none;background-color:#f7fbfc;}
 .left_menu ul li a:hover,
