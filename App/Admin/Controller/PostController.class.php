@@ -285,4 +285,9 @@ class PostController extends CommonController {
             exit('0');
         }
     }
+
+    public function relation() {
+
+    }
+
 }
