@@ -78,10 +78,14 @@
                     <td><input type="text" name="info[errortips]" value="<?php echo htmlspecialchars($model_field['errortips']);?>" size="50" class="input-text"></td>
                 </tr>
                 <tr>
+                    <th><strong>显示在列表页</strong></th>
+                    <td><input type="radio" name="info[islist]" value="1" <?php if($model_field['islist']) echo 'checked';?>> 是 <input type="radio" name="info[islist]" value="0" <?php if(!$model_field['islist']) echo 'checked';?>> 否</td>
+                </tr>
+                <tr>
                     <th><strong>值唯一</strong></th>
                     <td><input type="radio" name="info[isunique]" value="1" id="field_allow_isunique1" <?php if($model_field['isunique']) echo 'checked';?> <?php if(!$field_allow_isunique) echo 'disabled'; ?>> 是 <input type="radio" name="info[isunique]" value="0" id="field_allow_isunique0" <?php if(!$model_field['isunique']) echo 'checked';?> <?php if(!$field_allow_isunique) echo 'disabled'; ?>> 否</td>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <th><strong>作为基本信息</strong><br />基本信息将在添加页面左侧显示</th>
                     <td><input type="radio" name="info[isbase]" value="1"  <?php if($model_field['isbase']) echo 'checked';?>> 是 <input type="radio" name="info[isbase]" value="0" <?php if(!$model_field['isbase']) echo 'checked';?>> 否 </td>
                 </tr>
@@ -90,13 +94,9 @@
                     <td><input type="radio" name="info[issearch]" value="1" id="field_allow_search1" <?php if($model_field['issearch']) echo 'checked';?> <?php if(!$field_allow_search) echo 'disabled'; ?>> 是 <input type="radio" name="info[issearch]" value="0" id="field_allow_search0" <?php if(!$model_field['issearch']) echo 'checked';?> <?php if(!$field_allow_search) echo 'disabled'; ?>> 否</td>
                 </tr>
                 <tr>
-                    <th><strong>显示在列表页</strong></th>
-                    <td><input type="radio" name="info[islist]" value="1" <?php if($model_field['islist']) echo 'checked';?>> 是 <input type="radio" name="info[islist]" value="0" <?php if(!$model_field['islist']) echo 'checked';?>> 否</td>
-                </tr>
-                <tr>
                     <th><strong>在前台投稿中显示</strong></th>
                     <td><input type="radio" name="info[isadd]" value="1"  <?php if($model_field['isadd']) echo 'checked';?>/> 是 <input type="radio" name="info[isadd]" value="0" <?php if(!$model_field['isadd']) echo 'checked';?>/> 否</td>
-                </tr>
+                </tr> -->
             </table>
             <div class="bk15"></div>
             <input name="info[modelid]" type="hidden" value="<?php echo $modelid; ?>">

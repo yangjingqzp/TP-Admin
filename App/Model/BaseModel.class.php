@@ -34,6 +34,8 @@ class BaseModel extends Model {
                 $Page->setConfig($key, $param);
             }
         }
+        $count = $this->where($where)->count();
+        $Page = new Page($count,$limit);
         $show = $Page->show();
         return array("data" => $list, "page" => $show);
     }

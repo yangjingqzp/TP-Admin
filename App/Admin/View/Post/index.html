@@ -12,24 +12,24 @@
 </block>
 <block name="search">
     <div id="searchid">
-        <form name="searchform" action="" method="get">
+        <form name="searchform" action="" method="post">
             <table width="100%" cellspacing="0" class="search-form">
                 <tbody>
                     <tr>
                         <td>
                             <div class="explain-col">
-                                <select name="s[date]" class="filter-select">
+                                <select name="date" class="filter-select">
                                     <option value="0">全部日期</option>
                                     <?php foreach ($months as $key => $month) { ?>
-                                        <option value="<?php echo $month; ?>" <?php if ($s['month'] == $month) { echo "selected"; } ?>><?php echo $month['month']; ?></option>
+                                        <option value="<?php echo $month['month']; ?>" <?php if ($date == $month['month']) { echo "selected"; } ?>><?php echo $month['month']; ?></option>
                                     <?php } ?>
                                 </select>
                                 <?php foreach ($taxonomies as $key => $taxonomy) { ?>
                                 <?php if (isset($termsGroupByTaxonomy[$taxonomy['name']])) { ?>
                                 <?php echo \Org\Util\Form::term_select($termsGroupByTaxonomy[$taxonomy['name']], $tax[$taxonomy['name']], 'name="tax[' . $taxonomy['name'] . ']"', '所有' . $taxonomy['label']); ?>
                                 <?php } } ?>
-                                <input name="s[title]" type="text" value="<?php echo $s['title']; ?>" class="input-text">
-                                <input type="submit" name="search" class="button" value="搜索">
+                                <input name="title" type="text" value="<?php echo $title; ?>" class="input-text">
+                                <input type="submit" class="button" value="搜索">
                             </div>
                         </td>
                     </tr>

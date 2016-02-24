@@ -15,14 +15,15 @@ class PostModel extends BaseModel {
     protected $modelid, $my_fields;
 
     public function setModel($modelid) {
-        $this->model = model('Model')->where("siteid = %d and id = %d",get_siteid(),$modelid)->find();
-        if (empty($this->model)) {
+        $model = model('Model')->where("siteid = %d and id = %d",get_siteid(),$modelid)->find();
+        if (empty($model)) {
             showmessage('模型不存在！');
         }
         $this->modelid = $modelid;
-        $this->trueTableName = C("DB_PREFIX").strtolower($this->model['tablename']);
+        $this->tableName = strtolower($model['tablename']);
+        $this->trueTableName = C("DB_PREFIX").strtolower($model['tablename']);
         $this->setField();
-        return $this->model;
+        return $model;
     }
 
     public function contentList($where=array(), $order = "id desc", $limit=20, $page_params = array()) {
@@ -50,7 +51,7 @@ class PostModel extends BaseModel {
         if (is_null($modelid)) {
             $modelid = $this->modelid;
         }
-        $module_fields = D('ModelField')->field($field)->where(array('modelid' => $modelid, 'islist' => 1 ,'siteid' => get_siteid()))->order('listorder asc')->select();
+        $module_fields = model('ModelField')->field($field)->where(array('modelid' => $modelid, 'islist' => 1 ,'siteid' => get_siteid()))->order('listorder asc')->select();
         return $module_fields;
     }
 
@@ -73,16 +74,6 @@ class PostModel extends BaseModel {
         // 匹配数据库字段，防止SQL语句出错
         $postData = $this->parseField($inputinfo);
         $postData = array_merge($postData,array('username' => $_SESSION['user_info']['account'], 'siteid' => get_siteid()));
-
-        // 设置更新时间 统一到CommonModel中通过CallBack函数设置
-        /*if(isset($content_input->fields['updatetime'])) {
-            $setting = string2array($content_input->fields['updatetime']['setting']);
-            if ($setting['fieldtype'] == "int") {
-                $postData['updatetime'] = time();
-            } else {
-                $postData['updatetime'] = date($setting['format']);
-            }
-        }*/
         return $this->add($postData);
 
     }
@@ -98,16 +89,6 @@ class PostModel extends BaseModel {
         $inputinfo = $inputinfo['system'];
         $postData = $this->parseField($inputinfo);
         $postData['siteid'] = get_siteid();
-
-        // 设置更新时间 统一到CommonModel中通过CallBack函数设置
-        /*if(isset($content_input->fields['updatetime'])) {
-            $setting = string2array($content_input->fields['updatetime']['setting']);
-            if ($setting['fieldtype'] == "int") {
-                $postData['updatetime'] = time();
-            } else {
-                $postData['updatetime'] = date($setting['format']);
-            }
-        }*/
         return $this->where("id = %d", $post_id)->save($postData);
     }
 

@@ -30,35 +30,40 @@ class PostController extends CommonController {
         if (empty($module)) {
             $this->error('模型不存在！');
         }
-        $post_logic = logic('Post');
         $this->db->setModel($module['id']);
-
         $list_fields = $this->db->getListFields(array('name', 'field'));
-        $fields = array('id', 'updatetime');
+        $fields = array('id', 'listorder', 'updatetime');
         foreach ($list_fields as $key => $field) {
             $fields[] = $field['field'];
         }
 
         // 分类，日期过滤
-        $tax = I('get.tax');
-        $date = I('get.date');
+        $tax = I('post.tax');
+        $date = I('post.date');
         // 标题检索
-        $title = I('title');
+        $title = I('post.title');
+        $post_logic = logic('Post');
+        $post_logic->db = $this->db;
         $post_logic->registerFilter('tax', $tax);
         $post_logic->registerFilter('date', $date);
         $post_logic->registerFilter('like', array('title' => $title));
 
         // 获取文章
-        $data = $post_logic->getPosts($module['tablename'], $fields);
-        // ->contentList($search, "listorder desc, id desc", 10, $fields);
+        $data = $post_logic->getPosts($fields, "listorder desc, id desc", 10);
+
         // 获取日期、分类信息
         $months = $this->db->getMonths();
         $taxonomies = logic('taxonomy')->getPostTaxonomy($module['tablename']);
         $termsGroupByTaxonomy = logic('category')->getPostTermsGroupByTaxonomy($module['tablename']);
-        $this->assign('tax', $tax_fiter);
+        // 搜索条件
+        $this->assign('tax', $tax);
+        $this->assign('date', $date);
+        $this->assign('title', $title);
+        // filter values
         $this->assign('months', $months);
         $this->assign('taxonomies', $taxonomies);
         $this->assign('termsGroupByTaxonomy', $termsGroupByTaxonomy);
+        // contents
         $this->assign('module', $module);
         $this->assign('contents',$data['data']);
         $this->assign('list_fields',$list_fields);

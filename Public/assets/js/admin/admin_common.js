@@ -13,24 +13,19 @@ function confirmurl(url,message) {
 function redirect(url) {
 	location.href = url;
 }
-//滚动条
-$(function(){
-	$(":text").addClass('input-text');
-})
 
 /**
 * 全选checkbox,注意：标识checkbox id固定为为check_box
 * @param string name 列表check名称,如 uid[]
 */
 function selectall(name) {
-	if ($("#check_box").attr("checked")=='checked') {
+	if ($("#check_box").prop("checked")) {
 		$("input[name='"+name+"']").each(function() {
-			$(this).attr("checked","checked");
-
+			$(this).prop("checked", true);
 		});
 	} else {
 		$("input[name='"+name+"']").each(function() {
-			$(this).removeAttr("checked");
+			$(this).prop("checked", false);
 		});
 	}
 }
@@ -38,7 +33,6 @@ function selectall(name) {
 function openwinx(url,name,w,h) {
 	if(!w) w=screen.width-4;
 	if(!h) h=screen.height-95;
-	// url = url+'&pc_hash='+pc_hash;
 	window.open(url,name,"top=100,left=400,width=" + w + ",height=" + h + ",toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no");
 }
 
