@@ -681,6 +681,22 @@ abstract class Driver {
      * @return string
      */
     protected function parseOrder($order) {
+        if (is_string($order)) {
+            $order_temp = preg_split("/\s+/", $order);
+            foreach ($order_temp as $key => $value) {
+                if (empty($value)) {
+                    unset($order_temp[$key]);
+                    continue;
+                }
+                if (strpos($value, '`') === 0
+                    || strtolower($value) == 'asc'
+                    || strtolower($value) == 'desc') {
+                    continue;
+                }
+                $order_temp[$key] = '`' . $value . '`';
+            }
+            $order = implode(' ', $order_temp);
+        }
         if(is_array($order)) {
             $array   =  array();
             foreach ($order as $key=>$val){
@@ -702,7 +718,7 @@ abstract class Driver {
      * @return string
      */
     protected function parseGroup($group) {
-        return !empty($group)? ' GROUP BY '.$group:'';
+        return !empty($group)? ' GROUP BY `'.$group.'`' : '';
     }
 
     /**
