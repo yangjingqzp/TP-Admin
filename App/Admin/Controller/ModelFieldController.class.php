@@ -129,6 +129,17 @@ class ModelFieldController extends CommonController {
             $model = $this->model_db->find($modelid);
             $model_field = $this->db->where(array('fieldid' => $fieldid))->find();
             extract($model_field);
+            // 获取相关设置参数
+            require MODEL_PATH.$formtype.DIRECTORY_SEPARATOR.'config.inc.php';
+            $setting = string2array($setting);
+            if ($formtype = 'relationship') {
+                $models = model('Model')->where(array('siteid' => $this->siteid))->field('id, name, tablename')->select();
+            }
+            ob_start();
+            include MODEL_PATH.$formtype.DIRECTORY_SEPARATOR.'field_edit_form.inc.php';
+            $form_data = ob_get_contents();
+            ob_end_clean();
+
             $this->assign('fields', $fields);
             $this->assign('modelid',$modelid);
             $this->assign('fieldid',$fieldid);
@@ -204,19 +215,22 @@ class ModelFieldController extends CommonController {
     public function public_field_setting() {
         $fieldtype = $_GET['fieldtype'];
         require MODEL_PATH.$fieldtype.DIRECTORY_SEPARATOR.'config.inc.php';
+        if ($fieldtype = 'relationship') {
+            $models = model('Model')->where(array('siteid' => $this->siteid))->field('id', 'name', 'tablename')->select();
+        }
         ob_start();
         include MODEL_PATH.$fieldtype.DIRECTORY_SEPARATOR.'field_add_form.inc.php';
         $data_setting = ob_get_contents();
         ob_end_clean();
 
         $settings = array(
-            'field_basic_table'=>$field_basic_table,
-            'field_minlength'=>$field_minlength,
-            'field_maxlength'=>$field_maxlength,
-            'field_allow_search'=>$field_allow_search,
-            'field_allow_fulltext'=>$field_allow_fulltext,
-            'field_allow_isunique'=>$field_allow_isunique,
-            'setting'=>$data_setting);
+            'field_basic_table' => $field_basic_table,
+            'field_minlength' => $field_minlength,
+            'field_maxlength' => $field_maxlength,
+            'field_allow_search' => $field_allow_search,
+            'field_allow_fulltext' => $field_allow_fulltext,
+            'field_allow_isunique' => $field_allow_isunique,
+            'setting' => $data_setting);
 
         $this->ajaxReturn($settings);
     }

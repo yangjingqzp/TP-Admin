@@ -1,14 +1,17 @@
+<link rel="stylesheet" type="text/css" href="<?php echo asset('js/multiselect/css/multi-select.css'); ?>">
 <table cellpadding="2" cellspacing="1" width="98%">
-	<tr>
-      <td width="100">文本框长度</td>
-      <td><input type="text" name="setting[size]" value="<?php echo $setting['size'];?>" size="10" class="input-text"></td>
-    </tr>
-	<tr>
-      <td>默认值</td>
-      <td><input type="text" name="setting[defaultvalue]" value="<?php echo $setting['defaultvalue'];?>" size="40" class="input-text"></td>
-    </tr>
-	<tr>
-      <td>是否为密码框</td>
-      <td><input type="radio" name="setting[ispassword]" value="1" <?php if($setting['ispassword']) echo 'checked';?>> 是 <input type="radio" name="setting[ispassword]" value="0" <?php if(!$setting['ispassword']) echo 'checked';?>> 否</td>
+    <tr>
+        <td width="100">选择模型</td>
+        <td>
+            <select multiple="multiple" id="model-select" name="setting[model][]">
+                <?php foreach ($models as $key => $model) { ?>
+                  <option value='<?php echo $model['id']; ?>' <?php if (in_array($model['id'], $setting['model'])) { echo "selected"; } ?>><?php echo $model['name']; ?></option>
+                <?php } ?>
+            </select>
+        </td>
     </tr>
 </table>
+<script type="text/javascript" src="<?php echo asset('js/multiselect/jquery.multi-select.js'); ?>"></script>
+<script type="text/javascript">
+    $('#model-select').multiSelect();
+</script>

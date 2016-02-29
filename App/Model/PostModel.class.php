@@ -28,9 +28,8 @@ class PostModel extends BaseModel {
 
     public function contentList($where=array(), $order = "id desc", $limit=20, $page_params = array()) {
         $module_fields = $this->getListFields();
-        $list_fields = array('id', 'listorder');
         $list_fields = array_merge($list_fields, array_translate($module_fields, 'fieldid', 'field'));
-        array_push($list_fields, 'inputtime', 'updatetime');
+        array_push($list_fields, 'id', 'listorder', 'inputtime', 'updatetime');
         return $this->getList($where, $order, $limit, $list_fields, $page_params);
     }
 

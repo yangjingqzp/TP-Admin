@@ -1,8 +1,10 @@
 <extend name="Layout:form" />
 <block name="subheader">
+    <link rel="stylesheet" type="text/css" href="{:asset('js/jquery-ui/jquery-ui.min.css')}">
     <script language="javascript" type="text/javascript" src="{:asset('js/admin/content_add.js')}" charset="UTF-8"></script>
     <script type="text/javascript" src="{:asset('js/admin/attachupload.js')}"></script>
     <script type="text/javascript" src="{:asset('js/ckeditor/ckeditor.js')}"></script>
+    <script type="text/javascript" src="{:asset('js/jquery-ui/jquery-ui.min.js')}"></script>
 </block>
 <block name="main">
     <form name="myform" id="myform" action="" method="post" enctype="multipart/form-data">
@@ -10,28 +12,223 @@
         <div class="post-body clear" style="margin-right: 300px;">
             <div class="common-form post-body-content" style="width: 100%; min-width: 463px; float: left;">
                 <table width="100%" cellspacing="0" class="table_form">
-                    <tbody>
-                        <tr>
-                            <th width="80"> <font color="red">*</font> 标题 </th>
-                            <td>
-                                <input type="text" style="width:400px;" name="page[title]" id="title" value="" style="color:" class="measure-input " onkeyup="strlen_verify(this, 'title_len', 80);"/>
-                                <input type="button" class="button" id="check_title_alt" value="检测重复" onclick="$.get('__CONTROLLER__/public_check_title?sid='+Math.random()*5, {data:$('#title').val()}, function(data){if(data=='1') {$('#check_title_alt').val('标题重复');$('#check_title_alt').css('background-color','#FFCC66');} else if(data=='0') {$('#check_title_alt').val('标题不重复');$('#check_title_alt').css('background-color','#F8FFE1')}})" style="width:73px;"/> 还可输入<B><span id="title_len">80</span></B> 个字符
-                            </td>
-                        </tr>
-                        <tr>
-                            <th width="80"> 内容 </th>
-                            <td>
-                                <textarea name="page[content]" id="content" boxid="content"></textarea><?php echo \Org\Util\Form::editor('content', 'full','', 1 , 1,'',200); ?>
-                                <div id='content_tip'></div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>相关文章</th>
-                            <td>
+                    <tr>
+                        <th width="80"> <font color="red">*</font> 标题 </th>
+                        <td>
+                            <input type="text" style="width:400px;" name="page[title]" id="title" value="" style="color:" class="measure-input " onkeyup="strlen_verify(this, 'title_len', 80);"/>
+                            <input type="button" class="button" id="check_title_alt" value="检测重复" onclick="$.get('__CONTROLLER__/public_check_title?sid='+Math.random()*5, {data:$('#title').val()}, function(data){if(data=='1') {$('#check_title_alt').val('标题重复');$('#check_title_alt').css('background-color','#FFCC66');} else if(data=='0') {$('#check_title_alt').val('标题不重复');$('#check_title_alt').css('background-color','#F8FFE1')}})" style="width:73px;"/> 还可输入<B><span id="title_len">80</span></B> 个字符
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="80"> 内容 </th>
+                        <td>
+                            <textarea name="page[content]" id="content" boxid="content"></textarea><?php echo \Org\Util\Form::editor('content', 'full','', 1 , 1,'',200); ?>
+                            <div id='content_tip'></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>相关文章</th>
+                        <td>
+                            <style type="text/css">
+                                @font-face {
+                                  font-family: 'Glyphicons Halflings';
+                                  src: url('{:asset("bootstrap/fonts/glyphicons-halflings-regular.eot")}');
+                                  src: url('{:asset("bootstrap/fonts/glyphicons-halflings-regular.eot?#iefix")}') format('embedded-opentype'), url('{:asset("bootstrap/fonts/glyphicons-halflings-regular.woff")}') format('woff'), url('{:asset("bootstrap/fonts/glyphicons-halflings-regular.ttf")}') format('truetype'), url('{:asset("glyphicons-halflings-regular.svg#glyphicons_halflingsregular")}') format('svg');
+                                }
 
-                            </td>
-                        </tr>
-                    </tbody>
+                                /*---------------------------------------------------------------------------------------------
+                                    Relationship, User
+                                ---------------------------------------------------------------------------------------------*/
+                                .cfs_relationship .post_list {
+                                    float: left;
+                                    overflow-y: scroll;
+                                    background: #f5f5f5;
+                                    border: 1px solid #dfdfdf;
+                                    box-sizing: border-box;
+                                    -moz-box-sizing: border-box;
+                                    height: 205px;
+                                    width: 49%;
+                                    -webkit-border-radius: 1px 1px 1px 1px;
+                                    border-radius: 1px 1px 1px 1px;
+                                }
+
+                                .cfs_relationship .post_list.selected_posts {
+                                    float: right;
+                                }
+
+                                .cfs_relationship .post_list div {
+                                    padding: 4px 6px;
+                                    border-bottom: 1px solid #eee;
+                                    cursor: pointer;
+                                }
+
+                                .cfs_relationship .post_list.available_posts > div {
+                                    position: relative;
+                                    padding-right: 3em;
+                                }
+
+                                .cfs_relationship .post_list.available_posts > div:after {
+                                    font-family: "Glyphicons Halflings";
+                                    position: absolute;
+                                    right: 1px;
+                                    top: 3px;
+                                    content: '\e092';
+                                    font-size: 12px;
+                                }
+
+                                .cfs_relationship .post_list div:last-child {
+                                    border-bottom: none;
+                                }
+
+                                .cfs_relationship .post_list div:hover {
+                                    background: #eee;
+                                }
+
+                                .cfs_relationship .available_posts div.used {
+                                    display: none;
+                                }
+
+                                .cfs_relationship .selected_posts div {
+                                    cursor: move;
+                                }
+
+                                .cfs_relationship .selected_posts div span.remove {
+                                    float: right;
+                                    width: 20px;
+                                    height: 16px;
+                                    cursor: pointer;
+                                }
+
+                                .cfs_relationship .filter_posts {
+                                    margin-bottom: 10px;
+                                }
+
+                                .cfs_input .field .cfs_relationship .cfs_filter_input {
+                                    width: 220px;
+                                    margin: 0;
+                                }
+
+                                .cfs_relationship .selected_posts div span.remove:before {
+                                    font-family: "Glyphicons Halflings";
+                                    content: "\e014";
+                                    font-size: 12px;
+                                    top: -2px;
+                                }
+                            </style>
+                            <div class="col-tab">
+                                <ul class="tabBut cu-li">
+                                    <?php $model_num = count($models); ?>
+                                    <?php foreach ($models as $key => $model) { ?>
+                                    <li id="tab_setting_<?php echo $key +1; ?>" class="<?php echo $key == 0 ? 'on' : ''; ?>" onclick="SwapTab('setting','on','',<?php echo $model_num; ?> ,<?php echo $key +1; ?>);"><?php echo $model['name'] ?></li>
+                                    <?php } ?>
+                                </ul>
+                                <?php foreach ($models as $key => $model) { ?>
+                                <div id="div_setting_<?php echo $key +1; ?>" class="contentList pad-10 field <?php echo $key == 0 ? '' : 'hidden'; ?>">
+                                    <div class="cfs_relationship">
+                                        <div class="filter_posts">
+                                            <input type="text" class="cfs_filter_input" autocomplete="off" placeholder="搜索文章...">
+                                            <input type="hidden" class="model_id" value="<?php echo $model['id']; ?>" />
+                                        </div>
+                                        <div class="available_posts post_list">
+                                        </div>
+                                        <div class="selected_posts post_list">
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="info[relationship][<?php echo $model['id']; ?>]" class="relationship" value="">
+                                </div>
+                                <?php } ?>
+                            </div>
+                            <script>
+                            (function($) {
+                                update_relationship_values = function(field) {
+                                    var post_ids = [];
+                                    field.find('.selected_posts div').each(function(idx) {
+                                        post_ids[idx] = $(this).attr('rel');
+                                    });
+                                    field.find('input.relationship').val(post_ids.join(','));
+                                }
+
+                                fill_relationship_data = function(_this) {
+                                    var modelid = _this.find('.filter_posts .model_id').val();
+                                    var title = _this.find('.filter_posts .cfs_filter_input').val();
+                                    var available_posts = _this.find('.available_posts');
+                                    $.ajax({
+                                        url : "<?php echo U('Post/getPosts') . '?ms=' . time(); ?>",
+                                        method : 'post',
+                                        data : {'modelid' : modelid, 'title' : title},
+                                        dataType : 'json',
+                                        success: function(res) {
+                                            var posts = '';
+                                            if (res.code == 0) {
+                                                $.each(res.data, function(index, ele) {
+                                                    posts += '<div rel="'+ ele.id +'">'+ ele.title +'</div>'
+                                                });
+                                                available_posts.html(posts);
+                                            } else {
+                                                available_posts.html('暂无内容！');
+                                            }
+                                        },
+                                        error: function() {
+                                            available_posts.html('暂无内容！');
+                                        }
+                                    });
+                                }
+
+                                $(function() {
+                                    var post_timer = null;
+
+                                    $('.cfs_relationship').init_relationship();
+                                    // add selected post
+                                    $(document).on('click', '.cfs_relationship .available_posts div', function() {
+                                        var parent = $(this).closest('.field');
+                                        var post_id = $(this).attr('rel');
+                                        var html = $(this).html();
+                                        $(this).addClass('used');
+                                        parent.find('.selected_posts').append('<div rel="'+post_id+'"><span class="remove"></span>'+html+'</div>');
+                                        update_relationship_values(parent);
+                                    });
+
+                                    // remove selected post
+                                    $(document).on('click', '.cfs_relationship .selected_posts .remove', function() {
+                                        var div = $(this).parent();
+                                        var parent = div.closest('.field');
+                                        var post_id = div.attr('rel');
+                                        parent.find('.available_posts div[rel='+post_id+']').removeClass('used');
+                                        div.remove();
+                                        update_relationship_values(parent);
+                                    });
+
+                                    // filter posts
+                                    $(document).on('keyup', '.cfs_relationship .cfs_filter_input', function() {
+                                        _this = $(this);
+                                        if (post_timer) {
+                                            clearTimeout(post_timer);
+                                        }
+                                        post_timer = setTimeout(function() {
+                                            fill_relationship_data(_this.closest('.cfs_relationship'));
+                                        }, 600);
+                                    });
+                                });
+
+                                $.fn.init_relationship = function() {
+                                    this.each(function() {
+                                        var $this = $(this);
+                                        $this.addClass('ready');
+                                        fill_relationship_data($this);
+                                        // sortable
+                                        $this.find('.selected_posts').sortable({
+                                            axis: 'y',
+                                            update: function(event, ui) {
+                                                var parent = $(this).closest('.field');
+                                                update_relationship_values(parent);
+                                            }
+                                        });
+                                    });
+                                }
+                            })(jQuery);
+                            </script>
+                        </td>
+                    </tr>
                 </table>
             </div>
 

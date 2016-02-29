@@ -38,6 +38,9 @@ class PageController extends CommonController {
                 $this->error('添加失败！');
             }
         } else {
+            $models = model('Model')->where(array('siteid' => $this->siteid))->select();
+            $this->assign('models',$models);
+
             $template_list = get_page_templates();
             $this->assign('template_list',$template_list);
             $this->display();

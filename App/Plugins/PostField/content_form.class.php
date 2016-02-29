@@ -43,14 +43,7 @@ class content_form {
 			}
 			$func = $v['formtype'];
 
-			if ($field == "relation" ) {
-				$value = string2array($data[$field]);
-				if (empty($value)) {
-					$value = array("IDS" => "", "CATS" => "", "TITLE" => "");
-				}
-			} else {
-				$value = isset($data[$field]) ? htmlspecialchars($data[$field], ENT_QUOTES) : '';
-			}
+			$value = isset($data[$field]) ? new_addslashes($data[$field]) : '';
 			// if(!method_exists($this, $func)) continue;
 			$form = $this->$func($field, $value, $v);
 			if ($form === false) {

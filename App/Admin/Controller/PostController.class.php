@@ -286,8 +286,28 @@ class PostController extends CommonController {
         }
     }
 
-    public function relation() {
-
+    public function getPosts() {
+        $modelid = I('post.modelid', '');
+        if (empty($modelid)) {
+            $this->ajaxReturn(array('code' => 10001, 'message' => '参数缺失！'));
+        }
+        $module = model('Model')->find($modelid);
+        if (empty($module)) {
+            $this->ajaxReturn(array('code' => 10002, 'message' => '参数错误！'));
+        }
+        $this->db->setModel($module['id']);
+        $list_fields = $this->db->getListFields(array('name', 'field'));
+        $fields = array('id', 'listorder', 'updatetime');
+        foreach ($list_fields as $key => $field) {
+            $fields[] = $field['field'];
+        }
+        $title = I('post.title', '');
+        $post_logic = logic('Post');
+        $post_logic->db = $this->db;
+        $post_logic->registerFilter('like', array('title' => $title));
+        // 获取文章
+        $data = $post_logic->getPosts($fields, "listorder desc, id desc", 10);
+        $this->ajaxReturn(array('code' => 0, 'message' => '', 'data' => $data['data']));
     }
 
 }
