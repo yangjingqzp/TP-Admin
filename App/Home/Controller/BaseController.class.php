@@ -22,6 +22,8 @@ class BaseController extends Controller {
         $this->siteInfo = get_site_info($this->siteid);
         $site_theme = empty($this->siteInfo['template']) ? 'hhailuo' : $this->siteInfo['template'];
         C('DEFAULT_THEME', $site_theme);
+        $this->assign('siteInfo', $this->siteInfo);
+        $this->assign('siteid', $this->siteid);
     }
 
     protected function beforeFilter($method, $params=array()) {

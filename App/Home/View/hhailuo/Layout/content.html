@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <block name="title"><title>开源内容管理系统 - 红海螺</title></block>
+    <meta name="keywords" content="TP-Admin 开源房产系统 通用后台管理系统" />
+    <meta name="description" content="系统以Thinkphp为底层框架，融合PHPCMS 和 WP思想进行开发建立的一个大型的站群开源CMS系统；以模块化开发方式做为功能开发形式；框架易于功能扩展，代码维护，优秀的二次开发能力，可满足所有网站的应用需求。" />
+    <link href="{:asset('css/news/main.css')}" rel="stylesheet" type="text/css" />
+    <link href="{:asset('css/news/news.css')}" rel="stylesheet" type="text/css" />
+    <block name="header"></block>
+</head>
+
+<body>
+    <blcok name="top_nav">
+    <!--全站top主导航 start-->
+    <div class="Topnav mb10">
+        <div class="navBg">
+            <ul>
+                <li class="fl"><a href="javascript:void(0);" onclick="setHome(window.location);">设为首页</a></li>
+                <li class="fl ts"><a href="javascript:void(0);" onclick="addFavorite(document.title, window.location);">加入收藏</a></li>
+                <li class="fl"><a href="http://hhailuo.com/">红海螺</a></li>
+                <li class="fl"><a href="http://www.house.hhailuo.com/">红海螺房产</a></li>
+                <li class="fl"><a href="http://tp3.hhailuo.com/">TP-Admin</a></li>
+                <li class="fr ts">
+                    <iframe id="weatherIfr" src="http://weather.china.com.cn/widget/frame.html?theme=theme0" width="85" height="17" scrolling="no" marginheight="0" frameborder="0" style="margin-top: 11px;"></iframe>
+                </li>
+                <li class="fr ts"><a href="javascript:void(0);">2016年02月28日</a></li>
+                <li class="fr ts">
+                    <form method="get" target="_blank" name="findform" id="findform" action="http://www.hhailuo.com/">
+                        <input name="s" maxlength="64" value="" id="keyword">
+                        <input type="submit" value="" name="searchBtn" class="button2">
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!--全站TOP主导航 end-->
+    </blcok>
+
+    <block name="logo">
+    <!--LOGO+搜索 start-->
+    <div class="wrap clearfix top_logo_hand">
+        <div class="logo">
+            <h1><a href="http://www.cncity.cn" target="_blank">中国城市</a></h1>
+        </div>
+        <div class="fr mt20 ml20">
+            <form action="http://www.cncity.cn/index.php">
+                <input type="hidden" value="search" name="m" />
+                <input type="hidden" value="index" name="c" />
+                <input type="hidden" value="init" name="a" />
+                <input type="hidden" value="1" name="typeid" />
+                <input type="text" id="mykeyword" class="input9" placeholder="请输入新闻关键字" name="q" autocomplete="off">
+                <input type="submit" class="btnSearch" value="搜 索">
+            </form>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <!--LOGO+搜索 end-->
+    </block>
+
+    <block name="nav">
+    <div class="news-nav">
+        <div class="nav-list">
+            <a href="http://www.cncity.cn" title="中国城市" class="item current">首页</a><span>|</span>
+            <a href="http://www.cncity.cn/list-9-1.html" title="城市要闻" class="item">城市要闻</a>
+            <a href="http://www.cncity.cn/list-18-1.html" title="城市企业" class="item">城市企业</a>
+            <a href="http://www.cncity.cn/list-14-1.html" title="城市旅游" class="item">城市旅游</a>
+            <a href="http://www.cncity.cn/list-42-1.html" title="新兴产业" class="item">新兴产业</a>
+            <a href="http://www.cncity.cn/list-15-1.html" title="城市文化" class="item">城市文化</a>
+            <a href="http://www.cncity.cn/list-44-1.html" title="开发区" class="item">开发区</a>
+            <a href="http://www.cncity.cn/list-45-1.html" title="城市生态" class="item">城市生态</a>
+            <a href="http://www.cncity.cn/list-46-1.html" title="城市招商" class="item">城市招商</a>
+            <a href="http://www.cncity.cn/list-12-1.html" title="城市规划" class="item">城市规划</a>
+            <a href="http://www.cncity.cn/list-17-1.html" title="城市营销" class="item">城市营销</a>
+        </div>
+    </div>
+    </block>
+
+    <block name="content"></block>
+
+    <block name="copyright">
+    <!--公用底部 start-->
+    <div class="laybox Copyright mt20">
+        <p class="mb10">
+            <a href="city.china.com.cn" target="_blank">中国城市</a>&nbsp;|&nbsp;
+            <a href="http://esf.0736fdc.com/" target="_blank">常德二手房</a>&nbsp;|&nbsp;
+            <a href="http://www.hhailuo.com/about-us" target="_blank">关于我们</a>&nbsp;|&nbsp;<a href="http://tp3.hhailuo.com/#contact" target="_blank">联系我们</a>
+        </p>
+        <p>版权所有 红海螺 湘ICP备14002982号</p>
+    </div>
+    <!--公用底部 end-->
+    </block>
+    <!--全站通用-->
+    <script type="text/javascript" src="{:asset('js/jquery.min.js')}"></script>
+    <script type="text/javascript" src="{:asset('js/news/comon.js')}"></script>
+    <!--焦点图-->
+    <script type="text/javascript" src="{:asset('js/news/news-index.js')}"></script>
+    <block name="footer"></block>
+</body>
+</html>
