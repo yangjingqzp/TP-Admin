@@ -134,11 +134,11 @@
                                         <div class="selected_posts post_list">
                                         </div>
                                     </div>
-                                    <input type="hidden" name="info[relationship][<?php echo $model['id']; ?>]" class="relationship" value="">
+                                    <input type="hidden" name="info[relationship][<?php echo $model['tablename']; ?>]" class="relationship" value="">
                                 </div>
                                 <?php } ?>
                             </div>
-                            <script>
+                            <script type="text/javascript">
                             (function($) {
                                 update_relationship_values = function(field) {
                                     var post_ids = [];
@@ -152,6 +152,8 @@
                                     var modelid = _this.find('.filter_posts .model_id').val();
                                     var title = _this.find('.filter_posts .cfs_filter_input').val();
                                     var available_posts = _this.find('.available_posts');
+                                    var selected_posts = _this.siblings('.relationship').val().split(',');
+                                    selected_posts = $.isArray(selected_posts) ? selected_posts : [];
                                     $.ajax({
                                         url : "<?php echo U('Post/getPosts') . '?ms=' . time(); ?>",
                                         method : 'post',
@@ -160,8 +162,13 @@
                                         success: function(res) {
                                             var posts = '';
                                             if (res.code == 0) {
-                                                $.each(res.data, function(index, ele) {
-                                                    posts += '<div rel="'+ ele.id +'">'+ ele.title +'</div>'
+                                                $.each(res.data.available_posts, function(index, ele) {
+                                                    if ($.inArray(ele.id, selected_posts) == -1) {
+                                                        posts += '<div rel="'+ ele.id +'">'+ ele.title +'</div>'
+                                                    } else {
+                                                        posts += '<div rel="'+ ele.id +'" class="used">'+ ele.title +'</div>'
+                                                    }
+
                                                 });
                                                 available_posts.html(posts);
                                             } else {

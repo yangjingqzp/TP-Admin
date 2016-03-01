@@ -1,8 +1,10 @@
 <extend name="Layout:form" />
 <block name="subheader">
+    <link rel="stylesheet" type="text/css" href="{:asset('js/jquery-ui/jquery-ui.min.css')}">
     <script language="javascript" type="text/javascript" src="{:asset('js/admin/content_add.js')}" charset="UTF-8"></script>
     <script type="text/javascript" src="{:asset('js/admin/attachupload.js')}"></script>
     <script type="text/javascript" src="{:asset('js/ckeditor/ckeditor.js')}"></script>
+    <script type="text/javascript" src="{:asset('js/jquery-ui/jquery-ui.min.js')}"></script>
 </block>
 <block name="main">
     <form name="myform" id="myform" action="" method="post" enctype="multipart/form-data">

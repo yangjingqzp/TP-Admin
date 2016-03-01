@@ -307,7 +307,12 @@ class PostController extends CommonController {
         $post_logic->registerFilter('like', array('title' => $title));
         // 获取文章
         $data = $post_logic->getPosts($fields, "listorder desc, id desc", 10);
-        $this->ajaxReturn(array('code' => 0, 'message' => '', 'data' => $data['data']));
+        $selected_post_ids = I('post.selected_posts', array());
+        $selected_posts = array();
+        if (!empty($selected_post_ids)) {
+            $selected_posts = $this->db->where(array('id' => array('in', $selected_posts)))->feild($fields)->select();
+        }
+        $this->ajaxReturn(array('code' => 0, 'message' => '', 'data' => array('avaliable_posts' => $data['data'], 'selected_posts' => $selected_posts)));
     }
 
 }
